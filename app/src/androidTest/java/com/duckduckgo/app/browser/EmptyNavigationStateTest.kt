@@ -51,7 +51,8 @@ class EmptyNavigationStateTest {
             canGoBack = true,
             canGoForward = true,
             hasNavigationHistory = true,
-            progress = null
+            progress = null,
+            navigationHistory = NavigationHistory(emptyList())
         )
     }
 }

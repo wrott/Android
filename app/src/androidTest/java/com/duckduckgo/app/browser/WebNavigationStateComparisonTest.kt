@@ -135,7 +135,8 @@ class WebNavigationStateComparisonTest {
             canGoBack = true,
             canGoForward = true,
             hasNavigationHistory = true,
-            progress = newProgress
+            progress = newProgress,
+            navigationHistory = NavigationHistory(emptyList())
         )
     }
 }
