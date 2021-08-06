@@ -311,6 +311,7 @@ class BrowserTabViewModel(
         class CopyAliasToClipboard(val alias: String) : Command()
         class InjectEmailAddress(val address: String) : Command()
         class ShowEmailTooltip(val address: String) : Command()
+        class ShowBackNavigationHistory(val history: NavigationHistory) : Command()
         sealed class DaxCommand : Command() {
             object FinishTrackerAnimation : DaxCommand()
             class HideDaxDialog(val cta: Cta) : DaxCommand()
@@ -322,6 +323,7 @@ class BrowserTabViewModel(
             class ShowDownloadFinishedNotification(val file: File, val mimeType: String?) : DownloadCommand()
             object ShowDownloadInProgressNotification : DownloadCommand()
         }
+
         class EditWithSelectedQuery(val query: String) : Command()
     }
 
@@ -617,7 +619,8 @@ class BrowserTabViewModel(
         findInPageViewState.value = FindInPageViewState(visible = false, canFindInPage = true)
         omnibarViewState.value = currentOmnibarViewState().copy(omnibarText = trimmedInput, shouldMoveCaretToEnd = false)
         browserViewState.value = currentBrowserViewState().copy(browserShowing = true, showClearButton = false)
-        autoCompleteViewState.value = currentAutoCompleteViewState().copy(showSuggestions = false, showFavorites = false, searchResults = AutoCompleteResult("", emptyList()))
+        autoCompleteViewState.value =
+            currentAutoCompleteViewState().copy(showSuggestions = false, showFavorites = false, searchResults = AutoCompleteResult("", emptyList()))
     }
 
     private fun getUrlHeaders(): Map<String, String> = globalPrivacyControl.getHeaders()
@@ -746,6 +749,19 @@ class BrowserTabViewModel(
             recoverTabWithQuery(url.orEmpty())
         } else {
             command.value = Refresh
+        }
+    }
+
+    fun onUserLongPressedBack() {
+        val stack = webNavigationState?.navigationHistory ?: return
+        Timber.i("Navigation history size: ${stack.entries.size}")
+        stack.entries.forEach { (title: String?, url: String) ->
+            Timber.i("Nav stack: $title $url")
+        }
+
+        // todo probably don't want the current page, so should remove that from the stack and ensure we still have 1 or more history items
+        if (stack.entries.isNotEmpty()) {
+            command.value = ShowBackNavigationHistory(stack)
         }
     }
 

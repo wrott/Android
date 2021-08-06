@@ -23,6 +23,7 @@ import android.content.Intent.EXTRA_TEXT
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -219,6 +220,17 @@ class BrowserActivity : DuckDuckGoActivity(), CoroutineScope by MainScope() {
         val transaction = supportFragmentManager.beginTransaction()
         fragments.forEach { transaction.remove(it) }
         transaction.commit()
+    }
+
+    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?): Boolean {
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // show dialog
+            Timber.i("Long pressed on back button. Sending to tab: ${currentTab?.id}")
+            currentTab?.onLongPressBackButton()
+            true
+        } else {
+            super.onKeyLongPress(keyCode, event)
+        }
     }
 
     private fun launchNewSearchOrQuery(intent: Intent?) {

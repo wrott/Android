@@ -30,6 +30,7 @@ interface WebNavigationState {
     val canGoForward: Boolean
     val hasNavigationHistory: Boolean
     val progress: Int?
+    val navigationHistory: NavigationHistory
 }
 
 sealed class WebNavigationStateChange {
@@ -74,7 +75,7 @@ fun WebNavigationState.compare(previous: WebNavigationState?): WebNavigationStat
     return Other
 }
 
-data class WebViewNavigationState(private val stack: WebBackForwardList, override val progress: Int? = null) : WebNavigationState {
+data class WebViewNavigationState(val stack: WebBackForwardList, override val progress: Int? = null) : WebNavigationState {
 
     override val originalUrl: String? = stack.originalUrl
 
@@ -89,6 +90,8 @@ data class WebViewNavigationState(private val stack: WebBackForwardList, overrid
     override val canGoForward: Boolean = stack.currentIndex + 1 < stack.size
 
     override val hasNavigationHistory = stack.size != 0
+
+    override val navigationHistory: NavigationHistory = stack.toNavigationStack()
 
     /**
      * Auto generated equality method. We create this manually to omit the privately stored system stack property as
@@ -127,6 +130,15 @@ data class WebViewNavigationState(private val stack: WebBackForwardList, overrid
     }
 }
 
+private fun WebBackForwardList.toNavigationStack(): NavigationHistory {
+    val entryList = mutableListOf<NavigationHistoryEntry>()
+    for (i in this.currentIndex downTo 0) {
+        val currentStackItem = getItemAtIndex(i)
+        entryList.add(NavigationHistoryEntry(title = currentStackItem.title, url = currentStackItem.url))
+    }
+    return NavigationHistory(entryList)
+}
+
 @Suppress("DataClassPrivateConstructor")
 data class EmptyNavigationState private constructor(
     override val originalUrl: String?,
@@ -148,6 +160,7 @@ data class EmptyNavigationState private constructor(
     override val canGoForward: Boolean = false
     override val hasNavigationHistory: Boolean = false
     override val progress: Int? = null
+    override val navigationHistory: NavigationHistory = NavigationHistory(emptyList())
 }
 
 private val WebBackForwardList.originalUrl: String?
@@ -163,3 +176,6 @@ private val WebBackForwardList.isHttpsUpgrade: Boolean
         val previous = getItemAtIndex(currentIndex - 1)?.originalUrl?.toUri() ?: return false
         return current.isHttpsVersionOfUri(previous)
     }
+
+data class NavigationHistory(val entries: List<NavigationHistoryEntry>)
+data class NavigationHistoryEntry(val title: String?, val url: String)

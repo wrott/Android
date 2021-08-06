@@ -70,6 +70,7 @@ import com.duckduckgo.app.brokensite.BrokenSiteActivity
 import com.duckduckgo.app.brokensite.BrokenSiteData
 import com.duckduckgo.app.browser.BrowserTabViewModel.*
 import com.duckduckgo.app.browser.BrowserTabViewModel.Command.DownloadCommand
+import com.duckduckgo.app.browser.BrowserTabViewModel.Command.ShowBackNavigationHistory
 import com.duckduckgo.app.browser.DownloadConfirmationFragment.DownloadConfirmationDialogListener
 import com.duckduckgo.app.browser.autocomplete.BrowserAutoCompleteSuggestionsAdapter
 import com.duckduckgo.app.browser.cookies.ThirdPartyCookieManager
@@ -83,6 +84,7 @@ import com.duckduckgo.app.browser.favorites.FavoritesQuickAccessAdapter
 import com.duckduckgo.app.browser.favorites.FavoritesQuickAccessAdapter.Companion.QUICK_ACCESS_ITEM_MAX_SIZE_DP
 import com.duckduckgo.app.browser.favorites.QuickAccessDragTouchItemListener
 import com.duckduckgo.app.browser.filechooser.FileChooserIntentBuilder
+import com.duckduckgo.app.browser.history.NavigationHistoryAdapter
 import com.duckduckgo.app.browser.httpauth.WebViewHttpAuthStore
 import com.duckduckgo.app.browser.logindetection.DOMLoginDetector
 import com.duckduckgo.app.browser.model.BasicAuthenticationCredentials
@@ -121,8 +123,10 @@ import com.duckduckgo.app.tabs.ui.GridViewColumnCalculator
 import com.duckduckgo.app.tabs.ui.TabSwitcherActivity
 import com.duckduckgo.app.widget.ui.AddWidgetInstructionsActivity
 import com.duckduckgo.widget.SearchAndFavoritesWidget
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.content_test.*
 import kotlinx.android.synthetic.main.fragment_browser_tab.*
 import kotlinx.android.synthetic.main.include_cta_buttons.view.*
 import kotlinx.android.synthetic.main.include_dax_dialog_cta.*
@@ -674,6 +678,22 @@ class BrowserTabFragment :
                 omnibarTextInput.setText(it.query)
                 omnibarTextInput.setSelection(it.query.length)
             }
+            is ShowBackNavigationHistory -> showBackNavigationHistory(it)
+        }
+    }
+
+    private fun showBackNavigationHistory(history: ShowBackNavigationHistory) {
+        BottomSheetDialog(requireActivity()).also {
+            it.setContentView(R.layout.navigation_history_view)
+
+            it.findViewById<RecyclerView>(R.id.historyRecycler)?.also { recycler ->
+                NavigationHistoryAdapter().also { adapter ->
+                    recycler.adapter = adapter
+                    adapter.updateNavigationHistory(history.history)
+                }
+            }
+
+            it.show()
         }
     }
 
@@ -2312,5 +2332,9 @@ class BrowserTabFragment :
 
     override fun onSystemLocationPermissionNeverAllowed() {
         viewModel.onSystemLocationPermissionNeverAllowed()
+    }
+
+    fun onLongPressBackButton() {
+        viewModel.onUserLongPressedBack()
     }
 }
