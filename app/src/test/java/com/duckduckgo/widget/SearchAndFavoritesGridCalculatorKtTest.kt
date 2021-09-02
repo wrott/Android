@@ -16,6 +16,8 @@
 
 package com.duckduckgo.widget
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Test
 
@@ -30,7 +32,7 @@ class SearchAndFavoritesGridCalculatorKtTest {
     @RunWith(Parameterized::class)
     class SearchAndFavoritesGridColumnCalculatorKtTest(private val testCase: TestCase) {
 
-        private val context = InstrumentationRegistry.getInstrumentation().targetContext
+        private val context = ApplicationProvider.getApplicationContext<Context>()
 
         private val testee = SearchAndFavoritesGridCalculator()
 
