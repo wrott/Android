@@ -222,6 +222,8 @@ dependencies {
     androidTestImplementation Square.okHttp3.mockWebServer
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:_"
     androidTestImplementation 'app.cash.turbine:turbine:_'
+
+    testImplementation "org.robolectric:robolectric:_"
 }
 
 tasks.register('fastlaneVersionCode') {
