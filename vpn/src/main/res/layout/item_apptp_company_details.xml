@@ -56,15 +56,14 @@
                 android:textColor="?normalTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="10 trackers blocked in Uber app" />
+                tools:text="Google" />
 
             <TextView
                 android:id="@+id/tracking_company_attempts"
                 style="@style/TextAppearance.DuckDuckGo.Body2"
-                android:textColor="?secondaryTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="2m ago" />
+                tools:text="6 attempts. Known to collect:" />
         </LinearLayout>
 
     </LinearLayout>

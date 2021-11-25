@@ -257,8 +257,8 @@
 
     <!--  App Tracking Company Details -->
     <plurals name="atp_CompanyDetailsTrackingAttempts">
-        <item quantity="one">"%d attempt"</item>
-        <item quantity="other">%d attempts"</item>
+        <item quantity="one">"%d attempt. Known to collect:"</item>
+        <item quantity="other">%d attempts. Known to collect:"</item>
     </plurals>
     <plurals name="atp_CompanyDetailsTrackingAttemptsTitle">
         <item quantity="one">"%d tracking attempt blocked"</item>
