@@ -18,11 +18,11 @@
   -->
 
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.Dark.AppBarOverlay">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="wrap_content"
+                                                 android:theme="@style/AppTheme.Dark.AppBarOverlay">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/default_toolbar"
@@ -30,7 +30,50 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/toolbarBgColor"
         android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/AppTheme.Dark.PopupOverlay" />
+        app:popupTheme="@style/AppTheme.Dark.PopupOverlay" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/keyline_4">
+
+            <ImageView
+                android:id="@+id/app_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/tracking_network_logo_google_llc" />
+
+            <TextView
+                android:id="@+id/app_name"
+                style="@style/TextAppearance.DuckDuckGo.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/keyline_4"
+                android:textColor="?normalTextColor"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/app_icon"
+                app:layout_constraintTop_toTopOf="@+id/app_icon"
+                tools:text="Uber"/>
+
+            <TextView
+                android:id="@+id/app_trackd_ago"
+                style="@style/TextAppearance.DuckDuckGo.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/keyline_4"
+                android:textColor="?secondaryTextColor"
+                app:layout_constraintBottom_toBottomOf="@+id/app_icon"
+                app:layout_constraintStart_toEndOf="@+id/app_icon"
+                app:layout_constraintTop_toBottomOf="@+id/app_name"
+                tools:text="2m ago"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
 </com.google.android.material.appbar.AppBarLayout>
 

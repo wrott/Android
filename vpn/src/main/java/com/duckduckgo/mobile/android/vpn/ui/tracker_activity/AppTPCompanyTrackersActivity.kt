@@ -19,6 +19,8 @@ package com.duckduckgo.mobile.android.vpn.ui.tracker_activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -26,9 +28,15 @@ import androidx.lifecycle.lifecycleScope
 import com.duckduckgo.app.global.DuckDuckGoActivity
 import com.duckduckgo.mobile.android.ui.viewbinding.viewBinding
 import com.duckduckgo.mobile.android.vpn.R
+import com.duckduckgo.mobile.android.vpn.apps.ui.RestoreDefaultProtectionDialog
+import com.duckduckgo.mobile.android.vpn.breakage.ReportBreakageContract
+import com.duckduckgo.mobile.android.vpn.breakage.ReportBreakageScreen
 import com.duckduckgo.mobile.android.vpn.databinding.ActivityApptpCompanyTrackersActivityBinding
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.include_company_trackers_toolbar.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.threeten.bp.LocalDateTime
 
 class AppTPCompanyTrackersActivity : DuckDuckGoActivity() {
 
@@ -36,6 +44,12 @@ class AppTPCompanyTrackersActivity : DuckDuckGoActivity() {
     private val viewModel: AppTPCompanyTrackersViewModel by bindViewModel()
 
     private val itemsAdapter = AppTPCompanyDetailsAdapter()
+
+    private val reportBreakage = registerForActivityResult(ReportBreakageContract()) {
+        if (!it.isEmpty()) {
+            Snackbar.make(binding.root, R.string.atp_ReportBreakageSent, Snackbar.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +59,9 @@ class AppTPCompanyTrackersActivity : DuckDuckGoActivity() {
         val date = intent.getStringExtra(EXTRA_DATE)!!
 
         setContentView(binding.root)
-        with(binding.includeToolbar.defaultToolbar) {
-            setupToolbar(this)
-            this.title = appName
+        with(binding.includeToolbar) {
+            setupToolbar(defaultToolbar)
+            app_name.text = appName
         }
         title = appName
 
@@ -60,12 +74,32 @@ class AppTPCompanyTrackersActivity : DuckDuckGoActivity() {
             )
                 .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
                 .collect {
-                    findViewById<TextView>(R.id.tracking_attempts).text =
-                        resources.getQuantityString(R.plurals.atp_CompanyDetailsTrackingAttemptsTitle, it.totalTrackingAttempts, it.totalTrackingAttempts)
+                    binding.trackingAttempts.text = resources.getQuantityString(R.plurals.atp_CompanyDetailsTrackingAttemptsTitle, it.totalTrackingAttempts, it.totalTrackingAttempts)
+                    binding.includeToolbar.appTrackdAgo.text = it.lastTrackerBlockedAgo
                     itemsAdapter.updateData(it.trackingCompanies)
                 }
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_company_trackers_activity, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.reportIssue -> {
+                launchFeedback(); true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun launchFeedback() {
+        val packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME)!!
+        val appName = intent.getStringExtra(EXTRA_APP_NAME)!!
+        reportBreakage.launch(ReportBreakageScreen.LoginInformation(appName, packageName))
     }
 
     override fun onBackPressed() {

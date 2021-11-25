@@ -27,7 +27,7 @@
 
     <include
         android:id="@+id/include_toolbar"
-        layout="@layout/include_default_toolbar"/>
+        layout="@layout/include_company_trackers_toolbar"/>
 
     <TextView
         android:id="@+id/tracking_attempts"
