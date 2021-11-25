@@ -25,15 +25,12 @@
     android:theme="@style/AppTheme.Dark.AppBarOverlay">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/trackers_toolbar"
+        android:id="@+id/default_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/toolbarBgColor"
-        android:theme="@style/ToolbarTheme.Green"
-        app:popupTheme="@style/AppTheme.Dark.PopupOverlay" >
+        android:theme="@style/ToolbarTheme"
+        app:popupTheme="@style/AppTheme.Dark.PopupOverlay" />
 
-
-    </androidx.appcompat.widget.Toolbar>
-    
 </com.google.android.material.appbar.AppBarLayout>
 
