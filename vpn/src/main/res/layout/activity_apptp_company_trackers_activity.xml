@@ -29,14 +29,13 @@
         android:id="@+id/include_toolbar"
         layout="@layout/include_company_trackers_toolbar"/>
 
-    <TextView
+    <com.duckduckgo.mobile.android.ui.view.SectionHeaderTextView
         android:id="@+id/tracking_attempts"
-        style="@style/SettingsSectionTitle"
         android:paddingStart="@dimen/keyline_4"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:paddingTop="24dp"
-        android:paddingBottom="16dp"
+        android:paddingTop="@dimen/keyline_5"
+        android:paddingBottom="@dimen/keyline_4"
         tools:text="9 tracking attempts blocked"/>
 
     <androidx.recyclerview.widget.RecyclerView

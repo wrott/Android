@@ -25,7 +25,10 @@ import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.duckduckgo.app.global.DuckDuckGoActivity
+import com.duckduckgo.app.global.extensions.safeGetApplicationIcon
+import com.duckduckgo.mobile.android.ui.TextDrawable
 import com.duckduckgo.mobile.android.ui.viewbinding.viewBinding
 import com.duckduckgo.mobile.android.vpn.R
 import com.duckduckgo.mobile.android.vpn.apps.ui.RestoreDefaultProtectionDialog
@@ -62,8 +65,11 @@ class AppTPCompanyTrackersActivity : DuckDuckGoActivity() {
         with(binding.includeToolbar) {
             setupToolbar(defaultToolbar)
             app_name.text = appName
+            Glide.with(applicationContext)
+                .load(packageManager.safeGetApplicationIcon(packageName))
+                .error(TextDrawable.asIconDrawable(appName))
+                .into(appIcon)
         }
-        title = appName
 
         binding.activityRecyclerView.adapter = itemsAdapter
 
