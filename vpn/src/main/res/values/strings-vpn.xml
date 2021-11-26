@@ -269,6 +269,7 @@
         <item quantity="other">Blocked %d tracking attempts"</item>
     </plurals>
     <string name="atp_CompanyDetailsTrackingMenuReport">Report an Issue With This App</string>
+    <string name="atp_CompanyDetailsTrackingShowMore">Show %d more</string>
 
     <!--  App Tracking Protection Disable VPN Dialog -->
     <string name="atp_DisableConfirmationDialogTitle">Disable App Tracking Protection?</string>
