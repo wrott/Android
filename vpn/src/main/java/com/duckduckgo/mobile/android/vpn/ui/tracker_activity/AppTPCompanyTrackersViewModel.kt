@@ -68,17 +68,20 @@ class AppTPCompanyTrackersViewModel
                     companyDisplayName = trackerCompanyDisplayName,
                     trackingAttempts = data.value.size,
                     timestamp = timestamp,
-                    trackingSignals = mapTrackingSignals()))
-        }   XZ4S
+                    trackingSignals = mapTrackingSignals()
+                )
+            )
+        }
 
         val lastTrackerBlockedAgo =
             timeDiffFormatter.formatTimePassed(
-                LocalDateTime.now(), LocalDateTime.parse(sourceData[0].timestamp))
+                LocalDateTime.now(), LocalDateTime.parse(sourceData[0].timestamp)
+            )
 
         return ViewState(trackerData.size, lastTrackerBlockedAgo, sourceData)
     }
 
-    private fun mapTrackingSignals(): List<TrackingSignal>{
+    private fun mapTrackingSignals(): List<TrackingSignal> {
         val trackingSignals = listOf(TrackingSignal.fromTag("aaid"), TrackingSignal.fromTag("device_id"), TrackingSignal.fromTag("fb_persistent_id"))
         return trackingSignals.distinctBy { it.signalDisplayName }
     }
@@ -95,20 +98,19 @@ class AppTPCompanyTrackersViewModel
         val timestamp: String,
         val trackingSignals: List<TrackingSignal>
     )
-    enum class TrackingSignal(val signaltag: String, @StringRes val signalDisplayName: Int, @DrawableRes val signalIcon:  Int) {
+    enum class TrackingSignal(val signaltag: String, @StringRes val signalDisplayName: Int, @DrawableRes val signalIcon: Int) {
         AAID("AAID", R.string.atp_TrackingSignalAAID, R.drawable.ic_signal_id),
         DEVICE_ID("device_id", R.string.atp_TrackingSignalUniqueIdentifier, R.drawable.ic_signal_id),
         FB_PERSISTENT_ID("fb_persistent_id", R.string.atp_TrackingSignalUniqueIdentifier, R.drawable.ic_signal_id);
 
         companion object {
-            fun fromTag(signalTag: String): TrackingSignal{
+            fun fromTag(signalTag: String): TrackingSignal {
                 return valueOf(signalTag.uppercase())
             }
 
         }
     }
 }
-
 
 @ContributesMultibinding(AppObjectGraph::class)
 class AppTPCompanyTrackersViewModelFactory

@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -29,17 +28,17 @@ import com.bumptech.glide.Glide
 import com.duckduckgo.app.global.DuckDuckGoActivity
 import com.duckduckgo.app.global.extensions.safeGetApplicationIcon
 import com.duckduckgo.mobile.android.ui.TextDrawable
+import com.duckduckgo.mobile.android.ui.view.addClickableLink
 import com.duckduckgo.mobile.android.ui.viewbinding.viewBinding
 import com.duckduckgo.mobile.android.vpn.R
-import com.duckduckgo.mobile.android.vpn.apps.ui.RestoreDefaultProtectionDialog
 import com.duckduckgo.mobile.android.vpn.breakage.ReportBreakageContract
 import com.duckduckgo.mobile.android.vpn.breakage.ReportBreakageScreen
 import com.duckduckgo.mobile.android.vpn.databinding.ActivityApptpCompanyTrackersActivityBinding
+import com.duckduckgo.mobile.android.vpn.ui.onboarding.DeviceShieldFAQActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.include_company_trackers_toolbar.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.threeten.bp.LocalDateTime
 
 class AppTPCompanyTrackersActivity : DuckDuckGoActivity() {
 
@@ -59,7 +58,6 @@ class AppTPCompanyTrackersActivity : DuckDuckGoActivity() {
 
         val packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME)!!
         val appName = intent.getStringExtra(EXTRA_APP_NAME)!!
-        val date = intent.getStringExtra(EXTRA_DATE)!!
 
         setContentView(binding.root)
         with(binding.includeToolbar) {
@@ -71,8 +69,18 @@ class AppTPCompanyTrackersActivity : DuckDuckGoActivity() {
                 .into(appIcon)
         }
 
-        binding.activityRecyclerView.adapter = itemsAdapter
+        binding.trackingLearnMore.addClickableLink("learn_more_link", getText(R.string.atp_CompanyDetailsTrackingLearnMore)) {
+            DeviceShieldFAQActivity.intent(this).also {
+                startActivity(it)
+            }
+        }
 
+        binding.activityRecyclerView.adapter = itemsAdapter
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        val date = intent.getStringExtra(EXTRA_DATE)!!
         lifecycleScope.launch {
             viewModel.getTrackersForAppFromDate(
                 date,
@@ -85,7 +93,6 @@ class AppTPCompanyTrackersActivity : DuckDuckGoActivity() {
                     itemsAdapter.updateData(it.trackingCompanies)
                 }
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
