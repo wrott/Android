@@ -271,6 +271,60 @@
     <string name="atp_CompanyDetailsTrackingMenuReport">Report an Issue With This App</string>
     <string name="atp_CompanyDetailsTrackingShowMore">Show %d more</string>
 
+
+    <!--  App Tracking Company Signals -->
+    <string name="atp_TrackingSignalAAID">Android Advertising ID</string>
+    <string name="atp_TrackingSignalUniqueIdentifier">Unique Identifier</string>
+    <string name="atp_TrackingSignalCookies">Cookies</string>
+    <string name="atp_TrackingSignalOsVersion">OS Version</string>
+    <string name="atp_TrackingSignalOsBuildNumber">OS Build Number</string>
+    <string name="atp_TrackingSignalPlatform">Device Platform</string>
+    <string name="atp_TrackingSignalDeviceBrand">Device Brand</string>
+    <string name="atp_TrackingSignalDeviceModel">Device Model</string>
+    <string name="atp_TrackingSignalCPUData">CPU Data</string>
+    <string name="atp_TrackingSignalScreenResolution">Screen Resolution</string>
+    <string name="atp_TrackingSignalInternalStorage">Internal Storage</string>
+    <string name="atp_TrackingSignalExternalStorage">External Storage</string>
+    <string name="atp_TrackingSignalDeviceMemory">Device Memory</string>
+    <string name="atp_TrackingSignalDeviceName">Device Name</string>
+    <string name="atp_TrackingSignalWifiNetworkName">Wifi Network Name</string>
+    <string name="atp_TrackingSignalAppName">App Name</string>
+    <string name="atp_TrackingSignalAppVersion">App Version</string>
+    <string name="atp_TrackingSignalLocalIPAddress">Local IP Address</string>
+    <string name="atp_TrackingSignalISP">Internet Service Provider</string>
+    <string name="atp_TrackingSignalDeviceBootTime">Device Boot Time</string>
+    <string name="atp_TrackingSignalNetworkConnectionType">Network Connection Type</string>
+    <string name="atp_TrackingSignalSystemVolume">System Volume</string>
+    <string name="atp_TrackingSignalBatteryLevel">Battery Level</string>
+    <string name="atp_TrackingSignalChargingStatus">Charging Status</string>
+    <string name="atp_TrackingSignalBrightness">Brightness</string>
+    <string name="atp_TrackingSignalHeadphoneStatus">Headphone Status</string>
+    <string name="atp_TrackingSignalAccelerometerData">Accelerometer Data</string>
+    <string name="atp_TrackingSignalRotationData">Rotation Data</string>
+    <string name="atp_TrackingSignalDeviceOrientation">Device Orientation</string>
+    <string name="atp_TrackingSignalMagnetometerData">Magnetometer Data</string>
+    <string name="atp_TrackingSignalAvailableInternalStorage">Available Internal Storage</string>
+    <string name="atp_TrackingSignalAvailableExternalStorage">Available External Storage</string>
+    <string name="atp_TrackingSignalAvailableDeviceMemory">Available Device Memory</string>
+    <string name="atp_TrackingSignalScreenMargins">Screen Margins</string>
+    <string name="atp_TrackingSignalScreenDensity">Screen Density</string>
+    <string name="atp_TrackingSignalFontSize">Font Size</string>
+    <string name="atp_TrackingSignalNetworkCarrier">Network Carrier</string>
+    <string name="atp_TrackingSignalAppInstallDate">App Install Date</string>
+    <string name="atp_TrackingSignalFirstAppLaunchDate">First App Launch Date</string>
+    <string name="atp_TrackingSignalGPSCoordinates">GPS Coordinates</string>
+    <string name="atp_TrackingSignalPostalCode">Postal Code</string>
+    <string name="atp_TrackingSignalNeighbourhood">Neighbourhood</string>
+    <string name="atp_TrackingSignalCity">City</string>
+    <string name="atp_TrackingSignalState">State</string>
+    <string name="atp_TrackingSignalCountry">Country</string>
+    <string name="atp_TrackingSignalTimezone">Timezone</string>
+    <string name="atp_TrackingSignalEmailAddress">Email Address</string>
+    <string name="atp_TrackingSignalBirthday">Birthday</string>
+    <string name="atp_TrackingSignaGender">Gender</string>
+    <string name="atp_TrackingSignalFirstName">First Name</string>
+    <string name="atp_TrackingSignalLastName">Last Name</string>
+
     <!--  App Tracking Protection Disable VPN Dialog -->
     <string name="atp_DisableConfirmationDialogTitle">Disable App Tracking Protection?</string>
     <string name="atp_DisableConfirmationDialogMessage">If you noticed a problem with a specific app, you can manage protection for that app instead.</string>

@@ -114,12 +114,12 @@ class AppTPCompanyDetailsAdapter() : RecyclerView.Adapter<AppTPCompanyDetailsAda
             }
 
             val inflater = LayoutInflater.from(view.context)
+            topSignalsLayout.removeAllViews()
+            bottomSignalsLayout.removeAllViews()
             for (i in 1..5){
+
                 val topSignal = inflater.inflate(R.layout.view_company_tracked_signal, topSignalsLayout, false) as TrackedSignalChip
                 topSignal.bindTrackedSignal()
-//                val layoutParams = LinearLayout.LayoutParams(topSignalsLayout)
-//                layoutParams.setMargins(0, 8, 0, 8)
-//                layoutParams.gravity = Gravity.START
                 topSignalsLayout.addView(topSignal)
 
                 val bottomSignal = inflater.inflate(R.layout.view_company_tracked_signal, bottomSignalsLayout, false) as TrackedSignalChip

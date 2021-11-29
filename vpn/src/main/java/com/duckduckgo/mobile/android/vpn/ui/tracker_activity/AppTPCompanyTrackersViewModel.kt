@@ -16,6 +16,8 @@
 
 package com.duckduckgo.mobile.android.vpn.ui.tracker_activity
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import com.duckduckgo.app.global.DefaultDispatcherProvider
 import com.duckduckgo.app.global.DispatcherProvider
@@ -83,8 +85,12 @@ class AppTPCompanyTrackersViewModel
         val companyName: String,
         val companyDisplayName: String,
         val trackingAttempts: Int,
-        val timestamp: String
+        val timestamp: String,
+        val trackingSignals: List<TrackingSignals>
     )
+    enum class TrackingSignals(val signaltag: String, @StringRes val signalDisplayName: Int, @DrawableRes val signalIcon:  Int) {
+        ADVERTISING_ID("AAID", @)
+    }
 }
 
 @ContributesMultibinding(AppObjectGraph::class)
