@@ -18,13 +18,8 @@ package com.duckduckgo.mobile.android.vpn.ui.tracker_activity
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
 import com.duckduckgo.mobile.android.ui.view.leftDrawable
-import com.duckduckgo.mobile.android.vpn.R
-import com.google.android.material.chip.Chip
 
 class TrackedSignalChip @JvmOverloads constructor(
     context: Context,

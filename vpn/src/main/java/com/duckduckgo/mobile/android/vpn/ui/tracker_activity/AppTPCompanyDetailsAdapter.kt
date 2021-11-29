@@ -35,7 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
 
-
 class AppTPCompanyDetailsAdapter() : RecyclerView.Adapter<AppTPCompanyDetailsAdapter.CompanyDetailsViewHolder>() {
 
     private val items = mutableListOf<AppTPCompanyTrackersViewModel.CompanyTrackingDetails>()
@@ -124,7 +123,7 @@ class AppTPCompanyDetailsAdapter() : RecyclerView.Adapter<AppTPCompanyDetailsAda
                 topSignalsLayout.addView(topSignal)
             }
 
-            if (bottomSignals.isNotEmpty()){
+            if (bottomSignals.isNotEmpty()) {
                 bottomSignals.forEach {
                     val bottomSignal = inflater.inflate(R.layout.view_company_tracked_signal, bottomSignalsLayout, false) as TrackedSignalChip
                     bottomSignal.bindTrackedSignal(it)
@@ -139,7 +138,7 @@ class AppTPCompanyDetailsAdapter() : RecyclerView.Adapter<AppTPCompanyDetailsAda
             trackingAttempts.text = view.context.resources.getQuantityString(R.plurals.atp_CompanyDetailsTrackingAttempts, trackerInfo.trackingAttempts, trackerInfo.trackingAttempts)
             showMore.text = String.format(view.context.getString(R.string.atp_CompanyDetailsTrackingShowMore, 5))
             showMore.setOnClickListener {
-                if (!bottomSignalsLayout.isVisible){
+                if (!bottomSignalsLayout.isVisible) {
                     bottomSignalsLayout.show()
                     showMore.gone()
                 }
