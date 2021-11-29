@@ -18,7 +18,6 @@ package com.duckduckgo.mobile.android.vpn.ui.tracker_activity
 
 import android.content.Context
 import android.graphics.Color
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +31,6 @@ import com.duckduckgo.mobile.android.ui.TextDrawable
 import com.duckduckgo.mobile.android.ui.view.gone
 import com.duckduckgo.mobile.android.ui.view.show
 import com.duckduckgo.mobile.android.vpn.R
-import com.google.android.material.chip.Chip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -116,15 +114,25 @@ class AppTPCompanyDetailsAdapter() : RecyclerView.Adapter<AppTPCompanyDetailsAda
             val inflater = LayoutInflater.from(view.context)
             topSignalsLayout.removeAllViews()
             bottomSignalsLayout.removeAllViews()
-            for (i in 1..5){
 
+            val topSignals = trackerInfo.trackingSignals.take(2)
+            val bottomSignals = trackerInfo.trackingSignals.drop(2)
+
+            topSignals.forEach {
                 val topSignal = inflater.inflate(R.layout.view_company_tracked_signal, topSignalsLayout, false) as TrackedSignalChip
-                topSignal.bindTrackedSignal()
+                topSignal.bindTrackedSignal(it)
                 topSignalsLayout.addView(topSignal)
+            }
 
-                val bottomSignal = inflater.inflate(R.layout.view_company_tracked_signal, bottomSignalsLayout, false) as TrackedSignalChip
-                bottomSignal.bindTrackedSignal()
-                bottomSignalsLayout.addView(bottomSignal)
+            if (bottomSignals.isNotEmpty()){
+                bottomSignals.forEach {
+                    val bottomSignal = inflater.inflate(R.layout.view_company_tracked_signal, bottomSignalsLayout, false) as TrackedSignalChip
+                    bottomSignal.bindTrackedSignal(it)
+                    bottomSignalsLayout.addView(bottomSignal)
+                }
+                showMore.show()
+            } else {
+                showMore.gone()
             }
 
             companyName.text = trackerInfo.companyDisplayName

@@ -32,9 +32,9 @@ class TrackedSignalChip @JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : TextView(context, attrs, defStyleAttr) {
 
-    fun bindTrackedSignal(){
-        text = "Advertising Id"
-        leftDrawable(R.drawable.ic_signal_id)
+    fun bindTrackedSignal(trackingSignal: AppTPCompanyTrackersViewModel.TrackingSignal) {
+        text = resources.getString(trackingSignal.signalDisplayName)
+        leftDrawable(trackingSignal.signalIcon)
     }
 
 }
