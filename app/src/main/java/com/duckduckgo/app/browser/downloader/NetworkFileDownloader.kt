@@ -37,11 +37,28 @@ class NetworkFileDownloader @Inject constructor(
 ) {
 
     fun download(pendingDownload: PendingFileDownload, callback: FileDownloader.FileDownloadListener) {
+        Timber.d("Start download for ${pendingDownload.url}.")
 
         if (!downloadManagerAvailable()) {
+            Timber.d("Download manager not available, end downloading ${pendingDownload.url}.")
             callback.downloadFailed(context.getString(R.string.downloadManagerDisabled), DownloadFailReason.DownloadManagerDisabled)
             return
         }
+
+        Timber.d("Content-Disposition is ${pendingDownload.contentDisposition} and Content-Type is ${pendingDownload.mimeType} for ${pendingDownload.url}.")
+
+        if (pendingDownload.contentDisposition != null && pendingDownload.mimeType != null) {
+            when (val extractionResult = filenameExtractor.extract(pendingDownload)) {
+                is FilenameExtractor.FilenameExtractionResult.Extracted -> downloadFile(pendingDownload, extractionResult.filename, callback)
+                is FilenameExtractor.FilenameExtractionResult.Guess ->  downloadFile(pendingDownload, extractionResult.bestGuess, callback)
+            }
+        } else {
+            requestHeaders(pendingDownload, callback)
+        }
+    }
+
+    private fun requestHeaders(pendingDownload: PendingFileDownload, callback: FileDownloader.FileDownloadListener) {
+        Timber.d("Make a HEAD request for ${pendingDownload.url} as there are no values for Content-Disposition or Content-Type.")
 
         fileService.getFileDetails(pendingDownload.url)?.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -52,6 +69,8 @@ class NetworkFileDownloader @Inject constructor(
                     val contentType = response.headers().get("content-type")
                     val contentDisposition = response.headers().get("content-disposition")
 
+                    Timber.d("Retrieved new values from the HEAD request. Content-Disposition is $contentDisposition and Content-Type is $contentType.")
+
                     if (contentType != null) {
                         updatedPendingDownload = updatedPendingDownload.copy(mimeType = contentType)
                     }
@@ -60,23 +79,22 @@ class NetworkFileDownloader @Inject constructor(
                         updatedPendingDownload = updatedPendingDownload.copy(contentDisposition = contentDisposition)
                     }
                 } else {
-                    // TODO [Improve downloads] This is not a connection failed error, but a non-[200..300) response code.
+                    // This is a non-[200..300) response code. Proceed with download using the Download Manager.
                     Timber.d("HEAD request unsuccessful. Got a non-[200..300) response code for ${pendingDownload.url}. Error body: ${response.errorBody()}")
                 }
 
                 when (val extractionResult = filenameExtractor.extract(updatedPendingDownload)) {
-                   is FilenameExtractor.FilenameExtractionResult.Extracted -> downloadFile(updatedPendingDownload, extractionResult.filename, callback)
-                   is FilenameExtractor.FilenameExtractionResult.Guess ->  downloadFile(updatedPendingDownload, extractionResult.bestGuess, callback)
+                    is FilenameExtractor.FilenameExtractionResult.Extracted -> downloadFile(updatedPendingDownload, extractionResult.filename, callback)
+                    is FilenameExtractor.FilenameExtractionResult.Guess ->  downloadFile(updatedPendingDownload, extractionResult.bestGuess, callback)
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                // TODO [Improve downloads] This is a connection failed, the reason provided is misleading.
-                callback.downloadFailed(context.getString(R.string.downloadManagerDisabled), DownloadFailReason.DownloadManagerDisabled)
+                // Network exception occurred talking to the server or an unexpected exception occurred creating the request or processing the response.
+                callback.downloadFailed(context.getString(R.string.downloadsErrorMessage), DownloadFailReason.ConnectionRefused)
                 return
             }
         })
-
     }
 
     private fun downloadManagerAvailable(): Boolean {

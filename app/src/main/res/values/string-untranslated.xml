@@ -109,5 +109,6 @@
     <string name="downloadsMenuItem">Downloads</string>
     <string name="downloadsActivityTitle">Downloads</string>
     <string name="downloadsActivityNoItemsDescription">No files downloaded yet</string>
+    <string name="downloadsErrorMessage">Failed to download. Check internet connection.</string>
 
 </resources>
