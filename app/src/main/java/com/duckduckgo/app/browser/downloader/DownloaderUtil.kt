@@ -33,6 +33,13 @@ object DownloaderUtil {
             Pattern.CASE_INSENSITIVE,
         )
 
+    // Generic values for the Content-Type header used to enforce the decision to take the file extension from the URL if possible.
+    private val GENERIC_CONTENT_TYPES = setOf(
+        "application/octet-stream",
+        "application/unknown",
+        "binary/octet-stream",
+    )
+
     fun guessFileName(url: String?, contentDisposition: String?, mimeType: String?): String {
         var filename: String? = null
         var extension: String? = null
@@ -80,7 +87,7 @@ object DownloaderUtil {
                 val typeFromExt = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
                 if (typeFromExt == null) {
                     extension =
-                        if (fileExtension == mimeTypeExtension || mimeTypeExtension == null) {
+                        if (fileExtension == mimeTypeExtension || mimeTypeExtension == null || GENERIC_CONTENT_TYPES.contains(mimeType)) {
                             ".$fileExtension"
                         } else {
                             ".$mimeTypeExtension"

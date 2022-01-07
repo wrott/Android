@@ -30,7 +30,7 @@ class DownloaderUtilTest {
     }
 
     @Test
-    fun mytest0() {
+    fun testNullContentDispositionAndApplicationPdfContentTypeAndIncorrectFileExtensionInUrl() {
         assertEquals(
             "display_pdf.pdf",
             testee.guessFileName(
@@ -41,7 +41,7 @@ class DownloaderUtilTest {
     }
 
     @Test
-    fun mytest1() {
+    fun testNullContentDispositionAndImageJpegContentTypeAndUnsupportedCharsInFilenameInsideUrl() {
         assertEquals(
             "0_BRkMUINdhCYPk1KM.jpg",
             testee.guessFileName(
@@ -51,7 +51,7 @@ class DownloaderUtilTest {
     }
 
     @Test
-    fun mytest2() {
+    fun testAttachmentWithFilenameContentDispositionAndApplicationPdfContentTypeAndCorrectFileExtensionInUrl() {
         assertEquals(
             "MENU_2103.pdf",
             testee.guessFileName(
@@ -62,7 +62,7 @@ class DownloaderUtilTest {
     }
 
     @Test
-    fun mytest3() {
+    fun testAttachmentWithFilenameContentDispositionAndApplicationOctetStreamContentTypeAndCorrectFileExtensionInUrl() {
         assertEquals(
             "Telegram.apk",
             testee.guessFileName(
@@ -73,7 +73,7 @@ class DownloaderUtilTest {
     }
 
     @Test
-    fun mytest4() {
+    fun testNullContentDispositionAndApplicationOctetStreamContentTypeAndCorrectFileExtensionInUrl() {
         assertEquals(
             "youtube.apk",
             testee.guessFileName(
@@ -84,7 +84,7 @@ class DownloaderUtilTest {
     }
 
     @Test
-    fun mytest5() {
+    fun testInlineWithFilenameContentDispositionAndApplicationPdfContentTypeAndCorrectFileExtensionInUrl() {
         assertEquals(
             "Monitoraggio_Fase_2__report_nazionale_83_finale.pdf",
             testee.guessFileName(
@@ -96,27 +96,82 @@ class DownloaderUtilTest {
     }
 
     @Test
-    fun mytest6() {
+    fun testEmptyContentDispositionAndApplicationOctetStreamContentTypeAndCorrectFileExtensionInUrl() {
+        assertEquals(
+            "Pass-Example-Generic.pkpass",
+            testee.guessFileName(
+                url =
+                "https://github.com/keefmoon/Passbook-Example-Code/raw/master/Pass-Example-Generic/Pass-Example-Generic.pkpass",
+                contentDisposition ="",
+                mimeType = "application/octet-stream"))
+    }
+
+    @Test
+    fun testEmptyContentDispositionAndApplicationPdfContentTypeAndCorrectFileExtensionInUrl() {
+        assertEquals(
+            "be1da227fa380c8d057edbcf19cc8e14_pdf.pdf",
+            testee.guessFileName(
+                url =
+                "https://parsefiles.back4app.com/e4YQYTfDTeW9xmA2sGEd9WL7PWomHoGgC4xrNKqI/be1da227fa380c8d057edbcf19cc8e14_pdf.pdf",
+                contentDisposition ="",
+                mimeType = "application/pdf"))
+    }
+
+    @Test
+    fun testEmptyContentDispositionAndApplicationOctetStreamContentTypeAndCorrectFileExtensionInUrlSecondExample() {
+        assertEquals(
+            "ahc01_learn_to_play_web.pdf",
+            testee.guessFileName(
+                url =
+                "https://images-cdn.fantasyflightgames.com/filer_public/88/53/88538d11-5274-4b4a-ac8c-e8d758f71132/ahc01_learn_to_play_web.pdf",
+                contentDisposition ="",
+                mimeType = "application/pdf"))
+    }
+
+    @Test
+    fun testEmptyContentDispositionAndApplicationPdfContentTypeAndCorrectFileExtensionInUrlSecondExample() {
+        assertEquals(
+            "m_series.pdf",
+            testee.guessFileName(
+                url =
+                "https://data2.manualslib.com/pdf7/219/21886/2188542-mitsubishi_electric/m_series.pdf?ac6062bf6b9121363d8e4fcd47c39d2f",
+                contentDisposition ="",
+                mimeType = "application/pdf"))
+    }
+
+    @Test
+    fun testEmptyContentDispositionAndApplicationVndApplePkPassContentTypeAndCorrectFileExtensionInUrl() {
+        assertEquals(
+            "93348617.pkpass",
+            testee.guessFileName(
+                url =
+                "https://clorian-passbook-prod.s3.eu-west-1.amazonaws.com/MezquitaDeCordoba/e25e2290-334a-4227-b86c-693a249d8f88/93348617.pkpass",
+                contentDisposition ="",
+                mimeType = "application/vnd.apple.pkpass"))
+    }
+
+    @Test
+    fun testContentDispositionWithAttachmentAndFilenameBetweenQuotesAndSpaceAfterSemicolon() {
         assertEquals("filename.jpg", testee.parseContentDisposition("""attachment; filename="filename.jpg""""))
     }
 
     @Test
-    fun mytest7() {
+    fun testContentDispositionWithAttachmentAndFilenameBetweenQuotesAndSpacesBeforeAndAfterSemicolon() {
         assertEquals("filename.jpg", testee.parseContentDisposition("""attachment ; filename="filename.jpg""""))
     }
 
     @Test
-    fun mytest8() {
+    fun testContentDispositionWithAttachmentAndFilenameBetweenQuotesAndNoSpaces() {
         assertEquals("filename.jpg", testee.parseContentDisposition("""attachment;filename="filename.jpg""""))
     }
 
     @Test
-    fun mytest9() {
+    fun testContentDispositionWithAttachmentAndFilenameWithoutQuotesAndWithSpaceAfterSemicolon() {
         assertEquals("filename.jpg", testee.parseContentDisposition("""attachment; filename=filename.jpg"""))
     }
 
     @Test
-    fun mytest10() {
+    fun testContentDispositionWithInlineAndFilenameBetweenQuotesAndSpaceAfterSemicolon() {
         assertEquals("filename.jpg", testee.parseContentDisposition("""inline; filename="filename.jpg""""))
     }
 }
