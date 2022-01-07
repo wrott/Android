@@ -151,6 +151,17 @@ class DownloaderUtilTest {
     }
 
     @Test
+    fun testEmptyContentDispositionAndTextXpython3ContentTypeAndCorrectFileExtensionInUrl() {
+        assertEquals(
+            "bat.py",
+            testee.guessFileName(
+                url =
+                "https://ddg-name-test-ubsgiobgibsdgsbklsdjgm.netlify.app/uploads/qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm/bat.py",
+                contentDisposition ="",
+                mimeType = "text/x-python3; charset=UTF-8"))
+    }
+
+    @Test
     fun testContentDispositionWithAttachmentAndFilenameBetweenQuotesAndSpaceAfterSemicolon() {
         assertEquals("filename.jpg", testee.parseContentDisposition("""attachment; filename="filename.jpg""""))
     }
