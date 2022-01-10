@@ -85,7 +85,7 @@ class AuditSettingsViewModel @Inject constructor(
     }
 
     companion object {
-        const val STEP_1 = "https://cnn.com"
+        const val STEP_1 = "https://senglehardt.com/test/privacy-protections/storage-partitioning-2/"
         const val STEP_2 = "https://gizmodo.com"
         const val STEP_3 = "https://httpbin.org/basic-auth/u/pw"
         const val REQUEST_BLOCKING = "https://privacy-test-pages.glitch.me/privacy-protections/request-blocking/?run"

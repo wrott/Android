@@ -44,6 +44,16 @@ class BrowserChromeClient @Inject constructor(
 
     private var customView: View? = null
 
+    override fun onJsPrompt(
+        view: WebView?,
+        url: String?,
+        message: String?,
+        defaultValue: String?,
+        result: JsPromptResult?
+    ): Boolean {
+        return super.onJsPrompt(view, url, message, defaultValue, result)
+    }
+
     override fun onShowCustomView(view: View, callback: CustomViewCallback?) {
         try {
             Timber.d("on show custom view")
@@ -134,7 +144,7 @@ class BrowserChromeClient @Inject constructor(
     }
 
     override fun onCreateWindow(view: WebView?, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?): Boolean {
-        if (isUserGesture && resultMsg?.obj is WebView.WebViewTransport) {
+        if (resultMsg?.obj is WebView.WebViewTransport) {
             webViewClientListener?.openMessageInNewTab(resultMsg)
             return true
         }

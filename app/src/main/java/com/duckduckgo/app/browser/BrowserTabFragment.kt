@@ -1262,6 +1262,7 @@ class BrowserTabFragment :
                 builtInZoomControls = true
                 displayZoomControls = false
                 mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+                javaScriptCanOpenWindowsAutomatically = true
                 setSupportMultipleWindows(true)
                 disableWebSql(this)
                 setSupportZoom(true)

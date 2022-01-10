@@ -250,6 +250,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit-ktx:_"
     androidTestImplementation "androidx.test.espresso:espresso-core:_"
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:_"
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.4.0'
 
     testImplementation "org.mockito.kotlin:mockito-kotlin:_"
     testImplementation Testing.junit4

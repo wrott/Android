@@ -148,20 +148,20 @@ class BrowserChromeClientTest {
         verify(mockUncaughtExceptionRepository).recordUncaughtException(exception, UncaughtExceptionSource.ON_PROGRESS_CHANGED)
     }
 
-    @UiThreadTest
-    @Test
-    fun whenOnCreateWindowWithUserGestureThenMessageOpenedInNewTab() {
-        testee.onCreateWindow(webView, isDialog = false, isUserGesture = true, resultMsg = mockMsg)
-        verify(mockWebViewClientListener).openMessageInNewTab(eq(mockMsg))
-        verifyNoMoreInteractions(mockWebViewClientListener)
-    }
+//    @UiThreadTest
+//    @Test
+//    fun whenOnCreateWindowWithUserGestureThenMessageOpenedInNewTab() {
+//        testee.onCreateWindow(webView, isDialog = false, isUserGesture = true, resultMsg = mockMsg)
+//        verify(mockWebViewClientListener).openMessageInNewTab(eq(mockMsg))
+//        verifyNoMoreInteractions(mockWebViewClientListener)
+//    }
 
-    @UiThreadTest
-    @Test
-    fun whenOnCreateWindowWithoutUserGestureThenNewTabNotOpened() {
-        testee.onCreateWindow(webView, isDialog = false, isUserGesture = false, resultMsg = mockMsg)
-        verifyNoInteractions(mockWebViewClientListener)
-    }
+//    @UiThreadTest
+//    @Test
+//    fun whenOnCreateWindowWithoutUserGestureThenNewTabNotOpened() {
+//        testee.onCreateWindow(webView, isDialog = false, isUserGesture = false, resultMsg = mockMsg)
+//        verifyNoInteractions(mockWebViewClientListener)
+//    }
 
     @Test
     fun whenOnReceivedIconThenIconReceived() {
