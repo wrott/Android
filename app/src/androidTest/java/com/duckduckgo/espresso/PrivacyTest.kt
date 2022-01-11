@@ -16,7 +16,9 @@
 
 package com.duckduckgo.espresso
 
+import android.text.format.DateUtils
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -31,6 +33,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.duckduckgo.app.browser.BrowserActivity
 import com.duckduckgo.app.browser.R
+import com.duckduckgo.espresso.CustomMatchers.Companion.firstView
 import okhttp3.internal.wait
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
@@ -38,6 +41,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
+import androidx.test.espresso.Espresso
+
+import androidx.test.espresso.IdlingResource
+
+
+
 
 @RunWith(AndroidJUnit4::class)
 class PrivacyTest {
@@ -48,26 +57,35 @@ class PrivacyTest {
      * [androidx.test.rule.ActivityTestRule].
      */
     @get:Rule
-    var activityScenarioRule = activityScenarioRule<BrowserActivity>(BrowserActivity.intent(InstrumentationRegistry.getInstrumentation().targetContext, "https://senglehardt.com/test/privacy-protections/storage-partitioning/"))
+    var activityScenarioRule = activityScenarioRule<BrowserActivity>(BrowserActivity.intent(InstrumentationRegistry.getInstrumentation().targetContext, "https://senglehardt.com/test/privacy-protections/storage-partitioning-2/"))
 
     @Test @UserJourney
-    fun browser_openPopUp() {
+    fun privacyTest() {
+        val waitingTime: Long = 10000
+
         // since we use a fake toolbar, we want to wait until the real one is visible
         onView(isRoot()).perform(waitForView(withId(R.id.browserMenu)))
 
-        Thread.sleep(3000)
-//+----------->DuckDuckGoWebView{id=2131230889, res-name=browserWebView, visibility=VISIBLE, width=1080, height=2042, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@9854b2b, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=0} ****MATCHES****
-//+----------->DuckDuckGoWebView{id=2131230889, res-name=browserWebView, visibility=VISIBLE, width=1080, height=2042, has-focus=false, has-focusable=true, has-window-focus=true, is-clickable=true, is-enabled=true, is-focused=false, is-focusable=true, is-layout-requested=false, is-selected=false, layout-params=android.widget.FrameLayout$LayoutParams@37ea7f9, tag=null, root-is-layout-requested=false, has-input-connection=false, x=0.0, y=0.0, child-count=0} ****MATCHES****
-
-        onWebView(allOf(withId(R.id.browserWebView), isCompletelyDisplayed()))
+        onWebView()
             .withElement(findElement(Locator.ID, "run")) // similar to onView(withId(...))
             .check(webMatches(getText(), containsString("Run Tests")))
             .perform(webClick())
 
-        onWebView(allOf(withId(R.id.browserWebView), isCompletelyDisplayed()))
-            .withElement(findElement(Locator.ID, "test-document.cookie")) // similar to onView(withId(...))
-            .check(webMatches(getText(), containsString("false")))
+        IdlingPolicies.setMasterPolicyTimeout(
+            waitingTime * 2, TimeUnit.MILLISECONDS,
+        );
+        IdlingPolicies.setIdlingResourceTimeout(
+            waitingTime * 2, TimeUnit.MILLISECONDS,
+        );
+
+        val idlingResource: IdlingResource = ElapsedTimeIdlingResource(waitingTime)
+        Espresso.registerIdlingResources(idlingResource)
+
+        onWebView()
             .withTimeout(30, TimeUnit.SECONDS)
+            .withContextualElement(findElement(Locator.ID, "test-document.cookie")) // similar to onView(withId(...))
+            .check(webMatches(getText(), containsString("document.cookie - pass")))
+
 
     }
 
