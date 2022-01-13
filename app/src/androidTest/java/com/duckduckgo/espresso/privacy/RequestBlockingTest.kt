@@ -16,6 +16,7 @@
 
 package com.duckduckgo.espresso.privacy
 
+import android.webkit.WebView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
@@ -34,7 +35,7 @@ import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
 import androidx.test.espresso.web.model.Atoms.script
 import com.duckduckgo.espresso.PrivacyTest
-import com.duckduckgo.espresso.WaitTimeIdlingResource
+import com.duckduckgo.espresso.WebViewIdlingResource
 import com.duckduckgo.espresso.waitForView
 import com.duckduckgo.privacy.config.impl.network.JSONObjectAdapter
 import com.squareup.moshi.JsonAdapter
@@ -70,17 +71,22 @@ class RequestBlockingTest {
         IdlingPolicies.setMasterPolicyTimeout(waitTime * 10, TimeUnit.MILLISECONDS)
         IdlingPolicies.setIdlingResourceTimeout(waitTime * 10, TimeUnit.MILLISECONDS)
 
-        onView(isRoot()).perform(waitForView(withId(R.id.browserMenu)))
-        onView(withId(R.id.browserMenu)).perform(click())
+        var webView: WebView? = null
 
-        val idlingResourceForDisableProtections: IdlingResource = WaitTimeIdlingResource(400L)
+        onView(isRoot()).perform(waitForView(withId(R.id.browserMenu)))
+
+        activityScenarioRule.scenario.onActivity {
+            webView = it.findViewById(R.id.browserWebView)
+        }
+
+        val idlingResourceForDisableProtections = WebViewIdlingResource(webView!!)
         IdlingRegistry.getInstance().register(idlingResourceForDisableProtections)
 
+        onView(withId(R.id.browserMenu)).perform(click())
         onView(isRoot()).perform(waitForView(withId(R.id.whitelistPopupMenuItem)))
         onView(withId(R.id.whitelistPopupMenuItem)).perform(click())
-        onView(isRoot()).perform(waitForView(withId(R.id.pageLoadingIndicator)))
 
-        val idlingResourceForScript: IdlingResource = WaitTimeIdlingResource(waitTime)
+        val idlingResourceForScript: IdlingResource = WebViewIdlingResource(webView!!)
         IdlingRegistry.getInstance().register(idlingResourceForScript)
 
         val results = onWebView()
