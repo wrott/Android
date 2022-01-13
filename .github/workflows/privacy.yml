@@ -73,14 +73,14 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew app:connectedPlayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.duckduckgo.espresso.PrivacyTest
+          script: ./gradlew app:connectedPlayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.duckduckgo.espresso.PrivacyTest -Pandroid.testInstrumentationRunnerArguments.clearPackageData=true
 
-      - name: (Fail-only) Bundle the Privacy Test report
-        if: failure()
+      - name: Bundle the Privacy Test report
+        if: always()
         run: find . -type d -name 'reports' | zip -@ -r privacy-test-report.zip
 
-      - name: (Fail-only) Upload the Privacy Test report
-        if: failure()
+      - name: Upload the Privacy Test report
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: privacy-test-error-report
