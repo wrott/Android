@@ -41,6 +41,7 @@ class BrowserChromeClient @Inject constructor(
 ) : WebChromeClient() {
 
     var webViewClientListener: WebViewClientListener? = null
+    var testMode = false
 
     private var customView: View? = null
 
@@ -158,7 +159,8 @@ class BrowserChromeClient @Inject constructor(
         isUserGesture: Boolean,
         resultMsg: Message?
     ): Boolean {
-        if (isUserGesture && resultMsg?.obj is WebView.WebViewTransport) {
+        val isGesture = if (testMode) true else isUserGesture
+        if (isGesture && resultMsg?.obj is WebView.WebViewTransport) {
             webViewClientListener?.openMessageInNewTab(resultMsg)
             return true
         }

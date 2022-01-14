@@ -181,7 +181,7 @@ open class BrowserActivity : DuckDuckGoActivity(), CoroutineScope by MainScope()
         skipHome: Boolean
     ): BrowserTabFragment {
         Timber.i("Opening new tab, url: $url, tabId: $tabId")
-        val fragment = BrowserTabFragment.newInstance(tabId, url, skipHome)
+        val fragment = BrowserTabFragment.newInstance(tabId, url, skipHome, isTestMode(intent))
         addOrReplaceNewTab(fragment, tabId)
         currentTab = fragment
         return fragment
@@ -358,6 +358,10 @@ open class BrowserActivity : DuckDuckGoActivity(), CoroutineScope by MainScope()
         return intent.getBooleanExtra(NEW_SEARCH_EXTRA, false)
     }
 
+    private fun isTestMode(intent: Intent): Boolean {
+        return intent.getBooleanExtra(IS_TEST_MODE, false)
+    }
+
     fun launchPrivacyDashboard() {
         currentTab?.tabId?.let {
             startActivityForResult(PrivacyDashboardActivity.intent(this, it), DASHBOARD_REQUEST_CODE)
@@ -471,12 +475,14 @@ open class BrowserActivity : DuckDuckGoActivity(), CoroutineScope by MainScope()
             context: Context,
             queryExtra: String? = null,
             newSearch: Boolean = false,
-            notifyDataCleared: Boolean = false
+            notifyDataCleared: Boolean = false,
+            isTestMode: Boolean = false
         ): Intent {
             val intent = Intent(context, BrowserActivity::class.java)
             intent.putExtra(EXTRA_TEXT, queryExtra)
             intent.putExtra(NEW_SEARCH_EXTRA, newSearch)
             intent.putExtra(NOTIFY_DATA_CLEARED_EXTRA, notifyDataCleared)
+            intent.putExtra(IS_TEST_MODE, isTestMode)
             return intent
         }
 
@@ -486,6 +492,7 @@ open class BrowserActivity : DuckDuckGoActivity(), CoroutineScope by MainScope()
         const val NOTIFY_DATA_CLEARED_EXTRA = "NOTIFY_DATA_CLEARED_EXTRA"
         const val LAUNCH_FROM_DEFAULT_BROWSER_DIALOG = "LAUNCH_FROM_DEFAULT_BROWSER_DIALOG"
         const val LAUNCH_FROM_FAVORITES_WIDGET = "LAUNCH_FROM_FAVORITES_WIDGET"
+        const val IS_TEST_MODE = "IS_TEST_MODE"
 
         private const val APP_ENJOYMENT_DIALOG_TAG = "AppEnjoyment"
 

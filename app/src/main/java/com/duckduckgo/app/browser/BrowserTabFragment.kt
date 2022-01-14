@@ -279,6 +279,8 @@ class BrowserTabFragment :
 
     private val skipHome get() = requireArguments().getBoolean(SKIP_HOME_ARG)
 
+    private val isTestMode get() = requireArguments().getBoolean(IS_TEST_MODE)
+
     private val favoritesOnboarding get() = requireArguments().getBoolean(FAVORITES_ONBOARDING_ARG, false)
 
     private lateinit var popupMenu: PopupMenu
@@ -1301,6 +1303,7 @@ class BrowserTabFragment :
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView() {
+        webChromeClient.testMode = isTestMode
         webView = layoutInflater.inflate(
             R.layout.include_duckduckgo_browser_webview,
             webViewContainer,
@@ -1320,6 +1323,7 @@ class BrowserTabFragment :
                 builtInZoomControls = true
                 displayZoomControls = false
                 mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+                javaScriptCanOpenWindowsAutomatically = isTestMode
                 setSupportMultipleWindows(true)
                 disableWebSql(this)
                 setSupportZoom(true)
@@ -1849,6 +1853,7 @@ class BrowserTabFragment :
         private const val TAB_ID_ARG = "TAB_ID_ARG"
         private const val URL_EXTRA_ARG = "URL_EXTRA_ARG"
         private const val SKIP_HOME_ARG = "SKIP_HOME_ARG"
+        private const val IS_TEST_MODE = "IS_TEST_MODE"
         private const val FAVORITES_ONBOARDING_ARG = "FAVORITES_ONBOARDING_ARG"
 
         private const val ADD_SAVED_SITE_FRAGMENT_TAG = "ADD_SAVED_SITE"
@@ -1875,12 +1880,14 @@ class BrowserTabFragment :
         fun newInstance(
             tabId: String,
             query: String? = null,
-            skipHome: Boolean
+            skipHome: Boolean,
+            isTestMode: Boolean = false
         ): BrowserTabFragment {
             val fragment = BrowserTabFragment()
             val args = Bundle()
             args.putString(TAB_ID_ARG, tabId)
             args.putBoolean(SKIP_HOME_ARG, skipHome)
+            args.putBoolean(IS_TEST_MODE, isTestMode)
             query.let {
                 args.putString(URL_EXTRA_ARG, query)
             }
@@ -1892,6 +1899,7 @@ class BrowserTabFragment :
             val fragment = BrowserTabFragment()
             val args = Bundle()
             args.putString(TAB_ID_ARG, tabId)
+            args.putBoolean(IS_TEST_MODE, false)
             args.putBoolean(FAVORITES_ONBOARDING_ARG, true)
             fragment.arguments = args
             return fragment

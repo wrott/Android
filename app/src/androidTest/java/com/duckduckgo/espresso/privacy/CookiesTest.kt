@@ -16,13 +16,12 @@
 
 package com.duckduckgo.espresso.privacy
 
-import android.webkit.WebView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
@@ -32,57 +31,36 @@ import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.TimeUnit
 import androidx.test.espresso.web.model.Atoms.script
+import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
+import androidx.test.espresso.web.webdriver.DriverAtoms.getText
+import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
+import androidx.test.espresso.web.webdriver.Locator.ID
 import com.duckduckgo.espresso.PrivacyTest
 import com.duckduckgo.espresso.WaitTimeIdlingResource
-import com.duckduckgo.espresso.WebViewIdlingResource
 import com.duckduckgo.espresso.waitForView
 import com.duckduckgo.privacy.config.impl.network.JSONObjectAdapter
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.hamcrest.CoreMatchers.containsString
+import org.junit.Assert.assertNull
 
-class RequestBlockingTest {
+class CookiesTest {
 
     @get:Rule
-    var activityScenarioRule = activityScenarioRule<BrowserActivity>(BrowserActivity.intent(InstrumentationRegistry.getInstrumentation().targetContext, "https://privacy-test-pages.glitch.me/privacy-protections/request-blocking/?run"))
+    var activityScenarioRule = activityScenarioRule<BrowserActivity>(BrowserActivity.intent(InstrumentationRegistry.getInstrumentation().targetContext, queryExtra = "https://privacy-test-pages.glitch.me/privacy-protections/storage-blocking/?store", isTestMode = true))
 
     @Test @PrivacyTest
-    fun whenProtectionsAreEnabledRequestBlockedCorrectly() {
-        onView(isRoot()).perform(waitForView(withId(R.id.pageLoadingIndicator)))
-
-        val results = onWebView()
-            .perform(script(SCRIPT))
-            .get()
-
-        val testJson: TestJson? = getTestJson(results.toJSONString())
-        testJson?.value?.map {
-            if (!enabledIgnoreIds.contains(it.id)) {
-                assertTrue("Status for ${it.id} should be not loaded or failed and is ${it.status}", nonLoadedValues.contains(it.status))
-            }
-        }
-    }
-
-    @Test @PrivacyTest
-    fun whenProtectionsAreDisabledRequestAreNotBlocked() {
+    fun whenProtectionsAreEnabledHttpsUpgradedCorrectly() {
         val waitTime = 6000L
         IdlingPolicies.setMasterPolicyTimeout(waitTime * 10, TimeUnit.MILLISECONDS)
         IdlingPolicies.setIdlingResourceTimeout(waitTime * 10, TimeUnit.MILLISECONDS)
 
-        var webView: WebView? = null
+        onView(isRoot()).perform(waitForView(withId(R.id.pageLoadingIndicator)))
 
-        onView(isRoot()).perform(waitForView(withId(R.id.browserMenu)))
-
-        activityScenarioRule.scenario.onActivity {
-            webView = it.findViewById(R.id.browserWebView)
-        }
-
-        val idlingResourceForDisableProtections = WebViewIdlingResource(webView!!)
-        IdlingRegistry.getInstance().register(idlingResourceForDisableProtections)
-
-        onView(withId(R.id.browserMenu)).perform(click())
-        onView(isRoot()).perform(waitForView(withId(R.id.whitelistPopupMenuItem)))
-        onView(withId(R.id.whitelistPopupMenuItem)).perform(click())
+        onWebView()
+            .withElement(findElement(ID, "retrive"))
+            .check(webMatches(getText(), containsString("Retrieve data")))
+            .perform(webClick())
 
         val idlingResourceForScript: IdlingResource = WaitTimeIdlingResource(waitTime)
         IdlingRegistry.getInstance().register(idlingResourceForScript)
@@ -93,12 +71,10 @@ class RequestBlockingTest {
 
         val testJson: TestJson? = getTestJson(results.toJSONString())
         testJson?.value?.map {
-            if (!disabledIgnoreIds.contains(it.id)) {
-                assertEquals("Status for ${it.id} should be loaded and is ${it.status}", it.status, LOADED)
+            if (compatibleIds.contains(it.id)) {
+                assertNull("Value ${it.id} should be null", it.value)
             }
         }
-
-        IdlingRegistry.getInstance().unregister(idlingResourceForDisableProtections, idlingResourceForScript)
     }
 
     private fun getTestJson(jsonString: String): TestJson? {
@@ -109,12 +85,9 @@ class RequestBlockingTest {
 
     companion object {
         const val SCRIPT = "return results.results;"
-        const val LOADED = "loaded"
-        val nonLoadedValues = listOf("not loaded", "failed")
-        val enabledIgnoreIds = listOf("font")
-        val disabledIgnoreIds = listOf("websocket")
+        val compatibleIds = listOf("safe third party header cookie", "tracking third party header cookie", "safe third party iframe - JS cookie", "tracking third party iframe - JS cookie")
     }
 
-    data class TestJson(val status: Int, val value: List<RequestBlockingTest>)
-    data class RequestBlockingTest(val id: String, val category: String, val status: String)
+    data class TestJson(val status: Int, val value: List<CookiesTest>)
+    data class CookiesTest(val id: String, val value: String?)
 }
