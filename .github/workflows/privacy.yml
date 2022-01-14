@@ -10,10 +10,6 @@ jobs:
   privacy_tests:
     runs-on: macos-latest
     name: Privacy Integration Tests
-    strategy:
-      matrix:
-        api-level: [29]
-        target: [google_apis]
 
     steps:
       - name: Cancel previous
@@ -46,16 +42,17 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-emu-${{ matrix.api-level }}
+          key: avd-emu-30
 
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api-level }}
+          api-level: 30
           ndk: 21.0.6113669
-          target: ${{ matrix.target }}
-          arch: x86_64
+          target: google_atd
+          channel: canary
+          arch: x86
           profile: Nexus 5
           force-avd-creation: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
@@ -65,11 +62,12 @@ jobs:
       - name: Privacy Integration Tests
         uses: reactiveCircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api-level }}
+          api-level: 30
           ndk: 21.0.6113669
-          target: ${{ matrix.target }}
+          target: google_atd
+          channel: canary
           arch: x86_64
-          profile: Nexus 5
+          profile: Pixel 5
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
