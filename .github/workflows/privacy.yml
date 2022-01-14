@@ -51,7 +51,7 @@ jobs:
           api-level: 29
           ndk: 21.0.6113669
           target: google_apis
-          profile: Pixel 5
+          profile: Nexus 5
           script: echo "Generated AVD snapshot for caching."
 
       - name: Privacy Integration Tests
@@ -60,7 +60,7 @@ jobs:
           api-level: 29
           ndk: 21.0.6113669
           target: google_apis
-          profile: Pixel 5
+          profile: Nexus 5
           script: ./gradlew app:connectedPlayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=com.duckduckgo.espresso.PrivacyTest -Pandroid.testInstrumentationRunnerArguments.clearPackageData=true
 
       - name: Bundle the Privacy Test report
