@@ -65,7 +65,7 @@ class RequestBlockingTest {
 
     @Test @PrivacyTest
     fun whenProtectionsAreDisabledRequestAreNotBlocked() {
-        val waitTime = 10000L
+        val waitTime = 20000L
         IdlingPolicies.setMasterPolicyTimeout(waitTime * 10, TimeUnit.MILLISECONDS)
         IdlingPolicies.setIdlingResourceTimeout(waitTime * 10, TimeUnit.MILLISECONDS)
 

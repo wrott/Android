@@ -41,6 +41,7 @@ dependencies {
     implementation AndroidX.room.ktx
     implementation AndroidX.room.rxJava2
     implementation "com.jakewharton.threetenabp:threetenabp:_"
+    implementation project(path: ':appbuildconfig-api')
 }
 
 android {
