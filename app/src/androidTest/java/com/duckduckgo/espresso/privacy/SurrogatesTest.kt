@@ -44,7 +44,12 @@ import org.junit.Assert.assertTrue
 class SurrogatesTest {
 
     @get:Rule
-    var activityScenarioRule = activityScenarioRule<BrowserActivity>(BrowserActivity.intent(InstrumentationRegistry.getInstrumentation().targetContext, "https://privacy-test-pages.glitch.me/privacy-protections/surrogates/"))
+    var activityScenarioRule = activityScenarioRule<BrowserActivity>(
+        BrowserActivity.intent(
+            InstrumentationRegistry.getInstrumentation().targetContext,
+            "https://privacy-test-pages.glitch.me/privacy-protections/surrogates/"
+        )
+    )
 
     @Test @PrivacyTest
     fun whenProtectionsAreEnabledSurrogatesAreLoaded() {

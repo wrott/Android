@@ -47,7 +47,13 @@ import org.junit.Assert.assertNull
 class CookiesTest {
 
     @get:Rule
-    var activityScenarioRule = activityScenarioRule<BrowserActivity>(BrowserActivity.intent(InstrumentationRegistry.getInstrumentation().targetContext, queryExtra = "https://privacy-test-pages.glitch.me/privacy-protections/storage-blocking/?store", isTestMode = true))
+    var activityScenarioRule = activityScenarioRule<BrowserActivity>(
+        BrowserActivity.intent(
+            InstrumentationRegistry.getInstrumentation().targetContext,
+            queryExtra = "https://privacy-test-pages.glitch.me/privacy-protections/storage-blocking/?store",
+            isTestMode = true
+        )
+    )
 
     @Test @PrivacyTest
     fun whenProtectionsAreEnabledHttpsUpgradedCorrectly() {
@@ -85,7 +91,12 @@ class CookiesTest {
 
     companion object {
         const val SCRIPT = "return results.results;"
-        val compatibleIds = listOf("safe third party header cookie", "tracking third party header cookie", "safe third party iframe - JS cookie", "tracking third party iframe - JS cookie")
+        val compatibleIds = listOf(
+            "safe third party header cookie",
+            "tracking third party header cookie",
+            "safe third party iframe - JS cookie",
+            "tracking third party iframe - JS cookie"
+        )
     }
 
     data class TestJson(val status: Int, val value: List<CookiesTest>)

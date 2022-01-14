@@ -49,7 +49,13 @@ import org.junit.Assert.assertTrue
 class HttpsUpgradesTest {
 
     @get:Rule
-    var activityScenarioRule = activityScenarioRule<BrowserActivity>(BrowserActivity.intent(InstrumentationRegistry.getInstrumentation().targetContext, queryExtra = "http://privacy-test-pages.glitch.me/privacy-protections/https-upgrades/", isTestMode = true))
+    var activityScenarioRule = activityScenarioRule<BrowserActivity>(
+        BrowserActivity.intent(
+            InstrumentationRegistry.getInstrumentation().targetContext,
+            queryExtra = "http://privacy-test-pages.glitch.me/privacy-protections/https-upgrades/",
+            isTestMode = true
+        )
+    )
 
     @Test @PrivacyTest
     fun whenProtectionsAreEnabledHttpsUpgradedCorrectly() {

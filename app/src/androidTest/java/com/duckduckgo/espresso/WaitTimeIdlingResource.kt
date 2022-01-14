@@ -19,7 +19,7 @@ package com.duckduckgo.espresso
 import androidx.test.espresso.IdlingResource
 import androidx.test.espresso.IdlingResource.ResourceCallback
 
-class WaitTimeIdlingResource(private val waitTimeInMillis: Long): IdlingResource {
+class WaitTimeIdlingResource(private val waitTimeInMillis: Long) : IdlingResource {
     private val startTime: Long = System.currentTimeMillis()
     private lateinit var resourceCallback: ResourceCallback
 

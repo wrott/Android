@@ -47,7 +47,13 @@ import org.junit.Assert.assertTrue
 class GpcTest {
 
     @get:Rule
-    var activityScenarioRule = activityScenarioRule<BrowserActivity>(BrowserActivity.intent(InstrumentationRegistry.getInstrumentation().targetContext, queryExtra = "https://privacy-test-pages.glitch.me/privacy-protections/gpc/", isTestMode = true))
+    var activityScenarioRule = activityScenarioRule<BrowserActivity>(
+        BrowserActivity.intent(
+            InstrumentationRegistry.getInstrumentation().targetContext,
+            queryExtra = "https://privacy-test-pages.glitch.me/privacy-protections/gpc/",
+            isTestMode = true
+        )
+    )
 
     @Test @PrivacyTest
     fun whenProtectionsAreEnabledHttpsUpgradedCorrectly() {
