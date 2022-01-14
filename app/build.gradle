@@ -246,9 +246,9 @@ dependencies {
     androidTestImplementation AndroidX.test.orchestrator
     androidTestImplementation AndroidX.test.ext.junit
     androidTestImplementation "androidx.test.ext:junit-ktx:_"
-    androidTestImplementation "androidx.test.espresso:espresso-core:_"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.4.0'
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:_"
-    androidTestImplementation 'androidx.test.espresso:espresso-web:_'
 
     testImplementation "org.mockito.kotlin:mockito-kotlin:_"
     testImplementation Testing.junit4

@@ -25,13 +25,11 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.ext.junit.rules.activityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.duckduckgo.app.browser.BrowserActivity
 import com.duckduckgo.app.browser.R
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
 import androidx.test.espresso.web.model.Atoms.script
 import com.duckduckgo.espresso.PrivacyTest
@@ -43,7 +41,6 @@ import com.squareup.moshi.Moshi
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 
-@RunWith(AndroidJUnit4::class)
 class RequestBlockingTest {
 
     @get:Rule
