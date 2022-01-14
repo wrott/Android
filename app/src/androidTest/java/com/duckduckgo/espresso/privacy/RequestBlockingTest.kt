@@ -33,6 +33,7 @@ import org.junit.Test
 import java.util.concurrent.TimeUnit
 import androidx.test.espresso.web.model.Atoms.script
 import com.duckduckgo.espresso.PrivacyTest
+import com.duckduckgo.espresso.WaitTimeIdlingResource
 import com.duckduckgo.espresso.WebViewIdlingResource
 import com.duckduckgo.espresso.waitForView
 import com.duckduckgo.privacy.config.impl.network.JSONObjectAdapter
@@ -64,7 +65,7 @@ class RequestBlockingTest {
 
     @Test @PrivacyTest
     fun whenProtectionsAreDisabledRequestAreNotBlocked() {
-        val waitTime = 6000L
+        val waitTime = 10000L
         IdlingPolicies.setMasterPolicyTimeout(waitTime * 10, TimeUnit.MILLISECONDS)
         IdlingPolicies.setIdlingResourceTimeout(waitTime * 10, TimeUnit.MILLISECONDS)
 
@@ -83,7 +84,7 @@ class RequestBlockingTest {
         onView(isRoot()).perform(waitForView(withId(R.id.whitelistPopupMenuItem)))
         onView(withId(R.id.whitelistPopupMenuItem)).perform(click())
 
-        val idlingResourceForScript: IdlingResource = WebViewIdlingResource(webView!!)
+        val idlingResourceForScript: IdlingResource = WaitTimeIdlingResource(waitTime)
         IdlingRegistry.getInstance().register(idlingResourceForScript)
 
         val results = onWebView()
